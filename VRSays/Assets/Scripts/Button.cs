@@ -17,6 +17,7 @@ public class Button : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.mRenderer = this.GetComponent<Renderer>();
+		this.mRenderer.material.SetColor ("_Color", new Color(Random.value, Random.value, Random.value));
 		this.mColor = mRenderer.material.GetColor ("_Color");
 
 		colorChange = new ColorChange (this.replaceColor);
@@ -25,11 +26,19 @@ public class Button : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		
+	}
 
+	void OnMouseDown()
+	{
+		if (Input.GetMouseButtonDown (0)) {
+			replaceColor (Color.yellow);
+		}
 	}
 
 	public void replaceColor(Color color)
 	{
+		//TODO: Need to tween this
 		this.GetComponent<Renderer>().material.SetColor ("_Color", color);
 		#if DEBUG
 		Debug.Log("Color has been changed!");

@@ -15,7 +15,6 @@ public class ButtonManager : MonoBehaviour {
 	public float xPadding;
 	private List<Button> buttons;
 	private Timer timer;
-
 	static ButtonManager mInstance;
 	public static ButtonManager Instance {
 		get {
@@ -40,12 +39,12 @@ public class ButtonManager : MonoBehaviour {
 			pos.x += size.z + xPadding;
 			if (i > 0 && i % 3 == 0) {
 				pos.z -= 2;
+				pos.x -= (size.z + xPadding) * 3;
 			}
 			// declare a game object
 			GameObject go = Instantiate(buttonPrefab, pos, Quaternion.identity) as GameObject;
 			go.transform.localScale = this.size;
 			buttons.Add(go.GetComponent<Button>());
-			// initalize game object into scene
 
 		}	
 	}
@@ -59,5 +58,10 @@ public class ButtonManager : MonoBehaviour {
 	{
 		int rand = Random.Range (0, count);
 		buttons[rand].replaceColor(Color.yellow);
+	}
+
+	public void generateNewRound()
+	{
+		//TODO: Add quick logic to generate a new round
 	}
 }
