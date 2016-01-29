@@ -9,11 +9,13 @@ using System.Collections.Generic;
 public class ButtonManager : MonoBehaviour {
 
 	public GameObject buttonPrefab;
+	public Vector3 size = new Vector3 (1f, 1f, 1f);
 	public int count;
-	[Range(0.0f,10.0f)]
-	public int radius;
-
+	[Range(0.0f,5.0f)]
+	public float xPadding;
 	private List<Button> buttons;
+	private Timer timer;
+
 	static ButtonManager mInstance;
 	public static ButtonManager Instance {
 		get {
@@ -30,34 +32,32 @@ public class ButtonManager : MonoBehaviour {
 	}
 	void Start()
 	{	
+		timer = new Timer(5f,pickRandomButton);
 		buttons = new List<Button> ();
 		buttonPrefab.GetComponent<Button>().color = Color.white;
+		Vector3 pos = new Vector3 (0, 0, 0);
 		for (int i = 0; i < count; i++) {
-			// arrange objects in a circle
-			float angle = i * Mathf.PI * 2 /count;
-			Vector3 position = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+			pos.x += size.z + xPadding;
+			if (i > 0 && i % 3 == 0) {
+				pos.z -= 2;
+			}
 			// declare a game object
-			GameObject go = buttonPrefab;
-			Debug.Log (go.GetComponent<Button> ().GetType ());
+			GameObject go = Instantiate(buttonPrefab, pos, Quaternion.identity) as GameObject;
+			go.transform.localScale = this.size;
 			buttons.Add(go.GetComponent<Button>());
 			// initalize game object into scene
-			Instantiate(go, position, Quaternion.identity);
+
 		}	
 	}
 
 	void Update()
 	{
-		
+		timer.Update (Time.deltaTime);
+		Debug.Log (timer.CurrentTime);
 	}
-
-	private void removeButton(Button button){
-		buttons.Remove(button);
-	}
-	private void addButton(Button button){
-		buttons.Add(button);
-	}
-	private Button pickButton(Button button)
+	private void pickRandomButton()
 	{
-		return buttons.Find (x => x.GetInstanceID () == button.GetInstanceID ());
+		int rand = Random.Range (0, count);
+		buttons[rand].replaceColor(Color.yellow);
 	}
 }
