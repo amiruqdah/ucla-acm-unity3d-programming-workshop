@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Renderer))]
 public class Button : MonoBehaviour {
 	private delegate void ColorChange(Color color);
 	private ColorChange colorChange;
@@ -31,5 +32,4 @@ public class Button : MonoBehaviour {
 		Debug.Log("Color has been changed!");
 		#endif
 	}
-
 }

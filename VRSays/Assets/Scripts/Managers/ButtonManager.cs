@@ -8,6 +8,12 @@ using System.Collections.Generic;
 /// </summary>
 public class ButtonManager : MonoBehaviour {
 
+	public GameObject buttonPrefab;
+	public int count;
+	[Range(0.0f,10.0f)]
+	public int radius;
+
+	private List<Button> buttons;
 	static ButtonManager mInstance;
 	public static ButtonManager Instance {
 		get {
@@ -18,14 +24,40 @@ public class ButtonManager : MonoBehaviour {
 			return mInstance;
 		}
 	}
-
-	// Use this for initialization
-	void Start () {
-	
+	public int Count {
+		get;
+		set;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	void Start()
+	{	
+		buttons = new List<Button> ();
+		buttonPrefab.GetComponent<Button>().color = Color.white;
+		for (int i = 0; i < count; i++) {
+			// arrange objects in a circle
+			float angle = i * Mathf.PI * 2 /count;
+			Vector3 position = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+			// declare a game object
+			GameObject go = buttonPrefab;
+			Debug.Log (go.GetComponent<Button> ().GetType ());
+			buttons.Add(go.GetComponent<Button>());
+			// initalize game object into scene
+			Instantiate(go, position, Quaternion.identity);
+		}	
+	}
+
+	void Update()
+	{
+		
+	}
+
+	private void removeButton(Button button){
+		buttons.Remove(button);
+	}
+	private void addButton(Button button){
+		buttons.Add(button);
+	}
+	private Button pickButton(Button button)
+	{
+		return buttons.Find (x => x.GetInstanceID () == button.GetInstanceID ());
 	}
 }
