@@ -25,8 +25,7 @@ public class ButtonManager : MonoBehaviour {
 	public static ButtonManager Instance {
 		get {
 			if (mInstance == null) {
-				GameObject go = new GameObject ();
-				mInstance = go.AddComponent<ButtonManager> ();
+				mInstance= (ButtonManager)GameObject.FindObjectOfType (typeof(ButtonManager));
 			}
 			return mInstance;
 		}

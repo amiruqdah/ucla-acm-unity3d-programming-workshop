@@ -34,7 +34,7 @@ public class Button : MonoBehaviour {
 		Debug.Log (ButtonManager.Instance.finishedPickingSequence);
 		if (ButtonManager.Instance.finishedPickingSequence) {
 			if (Input.GetMouseButtonDown (0)) {
-				if (ButtonManager.Instance.isCorrectButton (this.GetComponent<Button> ())) {
+				if (ButtonManager.Instance.isCorrectButton(this)) {
 					this.GetComponent<Renderer> ().material.DOColor (color, "_Color", 0.5f);
 					Debug.Log ("correct");
 				}
