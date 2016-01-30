@@ -31,12 +31,14 @@ public class Button : MonoBehaviour {
 	}
 	void OnMouseDown()
 	{
-		Debug.Log (ButtonManager.Instance.finishedPickingSequence);
 		if (ButtonManager.Instance.finishedPickingSequence) {
 			if (Input.GetMouseButtonDown (0)) {
-				if (ButtonManager.Instance.isCorrectButton(this)) {
+				if (ButtonManager.Instance.isCorrectButton (this)) {
 					this.GetComponent<Renderer> ().material.DOColor (color, "_Color", 0.5f);
 					Debug.Log ("correct");
+				} else {
+					//this.GetComponent<Renderer> ().material.DOColor (Color.red, "_Color", 0.5f);
+					//ButtonManager.Instance.clearRound ();
 				}
 			}
 		}

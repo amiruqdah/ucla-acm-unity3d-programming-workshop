@@ -38,7 +38,6 @@ public class ButtonManager : MonoBehaviour {
 
 	void Start()
 	{	
-		timer = new Timer(5f,pickRandomButton);
 		generateRound();
 	}
 
@@ -94,9 +93,10 @@ public class ButtonManager : MonoBehaviour {
 			buttons.Add(go.GetComponent<Button>());
 
 		}	
+		timer = new Timer(5f,pickRandomButton);
 	}
 
-	private void clearRound()
+	public void clearRound()
 	{
 		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag ("Button");
 		foreach (GameObject gameObject in gameObjects) {
