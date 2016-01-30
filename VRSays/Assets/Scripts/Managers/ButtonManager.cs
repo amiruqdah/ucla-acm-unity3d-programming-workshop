@@ -2,6 +2,7 @@
 using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// A singleton that handles the spawning, deletion, and positional arrangement
@@ -45,6 +46,10 @@ public class ButtonManager : MonoBehaviour {
 	{
 		timer.Update (Time.deltaTime);
 		finishedPickingSequence = timer.isStopped;
+		if (finishedPickingSequence && buttonCheckList.Count == 0)
+			clearRound ();
+			
+
 		#if DEBUG
 		Debug.Log(timer.isStopped.ToString());
 		#endif
@@ -55,10 +60,8 @@ public class ButtonManager : MonoBehaviour {
 			int rand = Random.Range (0, buttons.Count);
 			buttons [rand].replaceColor (Color.yellow);
 			buttons [rand].gameObject.transform.DOPunchScale (new Vector3 (1f, 1f), 0.3f,2, 1f);
-			buttonCheckList.Enqueue (buttons [rand]);
-			buttons.RemoveAt (rand);
-
-			// messy I should figure out why reset isn't working
+			buttonCheckList.Enqueue(buttons[rand]);
+			buttons.RemoveAt(rand);
 			timer = new Timer (Random.Range (0.5f, 1.5f), pickRandomButton);
 		}
 	}
@@ -66,20 +69,23 @@ public class ButtonManager : MonoBehaviour {
 
 	public bool isCorrectButton(Button button)
 	{
-		if (button == this.buttonCheckList.Dequeue())
+		if (button.GetInstanceID() == this.buttonCheckList.Peek().GetInstanceID()) {
+			this.buttonCheckList.Dequeue();
 			return true;
+		}
 		else
 			return false;
 	}
 
-	private void generateRound()
+	private void generateRound(int count = 3)
 	{
+		this.count = count;
 		Sequence spawnSequence = DOTween.Sequence ();
 		buttonCheckList = new Queue<Button> ();
 		buttons = new List<Button> ();
 		Vector3 pos = new Vector3 (0, 0, 0);
 
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < this.count; i++) {
 			pos.x += size.z + xPadding;
 			if (i > 0 && i % 3 == 0) {
 				pos.z -= 2;
@@ -87,13 +93,13 @@ public class ButtonManager : MonoBehaviour {
 			}
 			GameObject go = Instantiate(buttonPrefab, pos, Quaternion.identity) as GameObject;
 			go.tag = "Button";
-			buttonCheckList.Enqueue (go.GetComponent<Button> ());
 			spawnSequence.Append(go.transform.DOScale(new Vector3(size.x,size.y,size.z),0.05f).SetEase(Ease.InOutSine));
 			spawnSequence.Append(go.transform.DORotate(new Vector3(0f,90f,0f),0.2f).SetEase(Ease.InCirc));
 			buttons.Add(go.GetComponent<Button>());
 
-		}	
-		timer = new Timer(5f,pickRandomButton);
+		}
+
+		timer = new Timer(1.5f, pickRandomButton);
 	}
 
 	public void clearRound()
@@ -102,7 +108,7 @@ public class ButtonManager : MonoBehaviour {
 		foreach (GameObject gameObject in gameObjects) {
 			Destroy (gameObject);
 		}
-		generateRound ();
+		generateRound (3 * Random.Range(1,3));
 	}
 
 

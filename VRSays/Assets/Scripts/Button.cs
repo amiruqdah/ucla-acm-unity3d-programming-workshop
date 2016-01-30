@@ -37,8 +37,8 @@ public class Button : MonoBehaviour {
 					this.GetComponent<Renderer> ().material.DOColor (color, "_Color", 0.5f);
 					Debug.Log ("correct");
 				} else {
-					//this.GetComponent<Renderer> ().material.DOColor (Color.red, "_Color", 0.5f);
-					//ButtonManager.Instance.clearRound ();
+					this.GetComponent<Renderer> ().material.DOColor (Color.red, "_Color", 0.5f);
+					ButtonManager.Instance.clearRound ();
 				}
 			}
 		}
