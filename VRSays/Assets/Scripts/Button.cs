@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 using System.Collections;
 
 [RequireComponent(typeof(Renderer))]
@@ -26,22 +27,33 @@ public class Button : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
-	}
 
+	}
 	void OnMouseDown()
 	{
-		if (Input.GetMouseButtonDown (0)) {
-			replaceColor (Color.yellow);
+		Debug.Log (ButtonManager.Instance.finishedPickingSequence);
+		if (ButtonManager.Instance.finishedPickingSequence) {
+			if (Input.GetMouseButtonDown (0)) {
+				if (ButtonManager.Instance.isCorrectButton (this.GetComponent<Button> ())) {
+					this.GetComponent<Renderer> ().material.DOColor (color, "_Color", 0.5f);
+					Debug.Log ("correct");
+				}
+			}
 		}
+
 	}
 
 	public void replaceColor(Color color)
 	{
+		Sequence colorPunch = DOTween.Sequence();
 		//TODO: Need to tween this
-		this.GetComponent<Renderer>().material.SetColor ("_Color", color);
+		colorPunch.Append(this.GetComponent<Renderer>().material.DOColor(color,"_Color", 0.5f));
+		colorPunch.Append (this.GetComponent<Renderer> ().material.DOColor (mColor, "_Color", 0.6f));
+
 		#if DEBUG
 		Debug.Log("Color has been changed!");
 		#endif
 	}
+
+
 }
